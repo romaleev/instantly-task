@@ -2,13 +2,8 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3001';
 
-export const fetchEmails = async () => {
-    const response = await axios.get(`${API_BASE_URL}/emails`);
-    return response.data;
-};
-
-export const searchEmails = async (query) => {
-    const response = await axios.get(`${API_BASE_URL}/emails/search`, { params: { query } });
+export const fetchEmails = async (query) => {
+    const response = await axios.get(`${API_BASE_URL}/emails`, { params: { query } });
     return response.data;
 };
 

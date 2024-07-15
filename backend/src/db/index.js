@@ -7,6 +7,12 @@ const knex = _knex({
   },
 });
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 class DB {
   static async addEmail(data) {
     return knex('emails').insert(data);
@@ -22,6 +28,7 @@ class DB {
   }
 
   static async getEmails() {
+    await sleep(5000)
     return knex('emails').select('*');
   }
 }

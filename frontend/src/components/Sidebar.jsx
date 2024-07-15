@@ -1,31 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { searchEmails } from '@/api';
+import React, {useState, useEffect, useRef} from 'react'
 import styles from '@/styles/Home.module.css';
 
-const Sidebar = ({ emails, onSelectEmail, onCompose }) => {
+const Sidebar = ({ emails, onSelectEmail, onCompose, onSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredEmails, setFilteredEmails] = useState(emails);
+    const initialized = useRef(false);
 
     useEffect(() => {
         setFilteredEmails(emails);
     }, [emails]);
 
-    const handleSearch = useCallback(async (query) => {
-        if (query) {
-            const results = await searchEmails(query);
-            setFilteredEmails(results);
-        } else {
-            setFilteredEmails(emails);
-        }
-    }, [emails]);
-
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            handleSearch(searchQuery);
+        if(initialized.current === false) return
+
+        const timeoutId = setTimeout(async () => {
+            await onSearch(searchQuery);
         }, 500);
 
         return () => clearTimeout(timeoutId);
-    }, [searchQuery, handleSearch]);
+    }, [searchQuery]);
+
+    useEffect(() => {
+        initialized.current = true
+    }, []);
 
     return (
         <div className={styles.sidebar}>

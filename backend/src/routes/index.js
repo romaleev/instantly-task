@@ -8,13 +8,8 @@ async function routes(fastify, options) {
   });
 
   fastify.get('/emails', async (request, reply) => {
-    const emails = await DB.getEmails();
-    reply.send(emails);
-  });
-
-  fastify.get('/emails/search', async (request, reply) => {
     const { query } = request.query;
-    const results = await DB.searchEmails(query);
+    const results = query ? await DB.searchEmails(query) : await DB.getEmails();
     reply.send(results);
   });
 }
